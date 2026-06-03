@@ -22,7 +22,7 @@ def acc(
     climatology: np.ndarray,
 ) -> float:
     """
-    Anomaly Correlation Coefficient — standard in climate forecasting papers.
+    Anomaly Correlation Coefficient — standard in climate forecasting.
     Measures correlation between forecast anomaly and observed anomaly.
     """
     a = y_true - climatology

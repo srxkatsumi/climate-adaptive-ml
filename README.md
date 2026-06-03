@@ -4,9 +4,18 @@ Daily ensemble forecasting system for temperature, precipitation, extreme events
 
 ---
 
-## Research objective
+## Daily update
 
-Test whether an **adaptive ensemble with temporal decay** outperforms static ML baselines and climatology persistence across multiple climate zones. Results feed a scientific paper targeting *Atmospheric Research* or *Weather and Forecasting*.
+Forecasts are updated automatically every day at **06:00 UTC**.
+
+Latest predictions:
+[data/predictions/](https://github.com/srxkatsumi/climate-adaptive-ml/tree/main/data/predictions)
+
+---
+
+## Objective
+
+Test whether an **adaptive ensemble with temporal decay** outperforms static ML baselines and climatology persistence across multiple climate zones.
 
 **Null hypothesis:** adaptive ensemble = static ensemble  
 **Alternative:** adaptive ensemble > static ensemble (statistically significant)
@@ -29,7 +38,7 @@ Test whether an **adaptive ensemble with temporal decay** outperforms static ML 
 |---|-------|------|
 | 1 | Climatology persistence | Minimum benchmark — any model must beat this |
 | 2 | Static Random Forest | Simple ML state of the art — fixed weights |
-| 3 | **Adaptive Ensemble** (RF + GB + SGD) | The contribution — temporal decay + weight adaptation |
+| 3 | **Adaptive Ensemble** (RF + GB + SGD) | Temporal decay + weight adaptation |
 
 ---
 
@@ -101,12 +110,4 @@ Historical archive: ERA5 reanalysis via Open-Meteo Historical API.
 |-------|--------|------|
 | 1 — Data pipeline | 2026 Q3 | Daily predictions running for all 3 cities |
 | 2 — Validation accumulation | 2026 Q4–2027 Q2 | Minimum 6 months clean validations |
-| 3 — Paper writing | 2027 Q3–Q4 | Submit to Atmospheric Research or Weather and Forecasting |
-
----
-
-## Scientific novelty
-
-1. **Temporal decay in live production** — not backtesting on known data
-2. **Spearman ρ as confidence indicator** — adapted from financial ML, novel in climate forecasting
-3. **Three simultaneous climate regimes** — demonstrates generalization, not geographic overfitting
+| 3 — Analysis | 2027 Q3–Q4 | Statistical comparison across climate regimes |
