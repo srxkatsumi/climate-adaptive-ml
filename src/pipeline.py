@@ -163,6 +163,35 @@ def fill_observations() -> None:
             log.warning(f"  Could not fill observations for {city_key}: {e}")
 
 
+CITY_DISPLAY = {
+    "barcelona": "Barcelona",
+    "sao_paulo": "São Paulo",
+    "manaus": "Manaus",
+}
+
+
+def update_readme_table(city_forecasts: dict) -> None:
+    """Replace the forecast table in README.md with today's D+1 min/max values."""
+    readme_path = ROOT / "README.md"
+    today_str = date.today().strftime("%d/%m/%Y")
+
+    rows = ["| City | Min (°C) | Max (°C) | Date |", "|------|----------|----------|------|"]
+    for city_key, values in city_forecasts.items():
+        name = CITY_DISPLAY.get(city_key, city_key)
+        t_min = f"{values['min']:.1f}" if values.get("min") is not None else "—"
+        t_max = f"{values['max']:.1f}" if values.get("max") is not None else "—"
+        rows.append(f"| {name} | {t_min} | {t_max} | {today_str} |")
+
+    table_block = "\n".join(rows)
+    content = readme_path.read_text()
+    start_marker = "<!-- FORECAST_TABLE_START -->"
+    end_marker = "<!-- FORECAST_TABLE_END -->"
+    before = content.split(start_marker)[0]
+    after = content.split(end_marker)[1]
+    readme_path.write_text(f"{before}{start_marker}\n{table_block}\n{end_marker}{after}")
+    log.info("  README table updated")
+
+
 def main() -> None:
     log.info("=== Climate Adaptive ML — Daily Pipeline ===")
     log.info(f"Run date: {date.today()}")
@@ -171,11 +200,23 @@ def main() -> None:
     fill_observations()
 
     cities = load_cities()
+    city_forecasts = {}
+
     for city_key, city_cfg in cities.items():
         try:
             run_city(city_key, city_cfg)
+            forecast = fetch_forecast(city_cfg, horizon_days=2)
+            tomorrow = forecast.iloc[1] if len(forecast) > 1 else forecast.iloc[0]
+            city_forecasts[city_key] = {
+                "min": tomorrow.get("temperature_2m_min"),
+                "max": tomorrow.get("temperature_2m_max"),
+            }
         except Exception as e:
             log.error(f"Failed for {city_key}: {e}")
+            city_forecasts[city_key] = {"min": None, "max": None}
+
+    log.info("Step 2: Updating README table...")
+    update_readme_table(city_forecasts)
 
     log.info("=== Pipeline complete ===")
 
