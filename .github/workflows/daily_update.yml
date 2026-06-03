@@ -1,0 +1,39 @@
+name: Daily Climate Forecast
+
+on:
+  schedule:
+    # 06:00 UTC — after 00Z synoptic run is processed by Open-Meteo
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    # allows manual trigger from GitHub Actions UI
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run daily pipeline
+        run: python -m src.pipeline
+
+      - name: Commit updated predictions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/predictions/
+          git diff --cached --quiet || git commit -m "data: daily forecast update $(date -u +%Y-%m-%d)"
+          git push

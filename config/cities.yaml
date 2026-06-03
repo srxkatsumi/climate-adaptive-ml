@@ -1,0 +1,31 @@
+cities:
+
+  barcelona:
+    name: "Barcelona"
+    country: "Spain"
+    latitude: 41.3828
+    longitude: 2.1769
+    timezone: "Europe/Madrid"
+    climate_type: "mediterranean"
+    climate_koppen: "Csa"
+    elevation_m: 12
+
+  sao_paulo:
+    name: "São Paulo"
+    country: "Brazil"
+    latitude: -23.5505
+    longitude: -46.6333
+    timezone: "America/Sao_Paulo"
+    climate_type: "tropical"
+    climate_koppen: "Cfa"
+    elevation_m: 760
+
+  manaus:
+    name: "Manaus"
+    country: "Brazil"
+    latitude: -3.1019
+    longitude: -60.0250
+    timezone: "America/Manaus"
+    climate_type: "equatorial"
+    climate_koppen: "Af"
+    elevation_m: 92

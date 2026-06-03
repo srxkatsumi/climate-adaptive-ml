@@ -1,0 +1,58 @@
+variables:
+
+  temperature:
+    enabled: true
+    priority: 1
+    unit: "°C"
+    open_meteo_vars:
+      - "temperature_2m_max"
+      - "temperature_2m_min"
+      - "temperature_2m_mean"
+    horizons_days: [1, 3, 5, 7, 10, 15]
+    metrics: ["MAE", "RMSE", "ACC"]
+    extreme_threshold_hot_celsius: 35.0
+    extreme_threshold_cold_celsius: 0.0
+
+  precipitation:
+    enabled: true
+    priority: 2
+    unit: "mm"
+    open_meteo_vars:
+      - "precipitation_sum"
+      - "rain_sum"
+      - "precipitation_hours"
+    horizons_days: [1, 3, 5, 7, 10, 15]
+    metrics: ["MAE", "RMSE", "BSS", "HSS"]
+    extreme_threshold_mm: 20.0
+
+  extreme_events:
+    enabled: true
+    priority: 3
+    types:
+      heat_wave:
+        definition: "3+ dias consecutivos acima do percentil 90"
+        variable: "temperature_2m_max"
+      drought:
+        definition: "precipitação < 1mm por 14+ dias consecutivos"
+        variable: "precipitation_sum"
+      heavy_rain:
+        definition: "precipitação > 50mm em 24h"
+        variable: "precipitation_sum"
+    metrics: ["HSS", "BSS", "POD", "FAR"]
+
+  wind:
+    enabled: true
+    priority: 4
+    unit: "km/h"
+    open_meteo_vars:
+      - "windspeed_10m_max"
+      - "winddirection_10m_dominant"
+      - "windgusts_10m_max"
+    horizons_days: [1, 3, 5, 7]
+    metrics: ["MAE", "RMSE"]
+    extreme_threshold_kmh: 60.0
+
+forecast:
+  horizons_days: [1, 3, 5, 7, 10, 15]
+  historical_days_for_training: 365
+  min_days_for_validation: 180

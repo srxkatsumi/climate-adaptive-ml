@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+.env
+.venv/
+venv/
+env/
+
+# Data — raw e processed nunca vão para o repo
+data/raw/
+data/processed/
+
+# Logs e relatórios gerados automaticamente
+logs/*.log
+logs/*.txt
+reports/*.html
+reports/*.pdf
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+*.ipynb~
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets e credenciais
+*.env
+secrets.yaml
+credentials.json
+
+# Modelos treinados (binários pesados)
+*.pkl
+*.joblib
+*.h5
+models/saved/
+
+# Catboost
+catboost_info/
