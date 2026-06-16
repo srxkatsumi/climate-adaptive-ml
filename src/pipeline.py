@@ -171,9 +171,13 @@ CITY_DISPLAY = {
 
 
 def update_readme_table(city_forecasts: dict) -> None:
-    """Replace the forecast table in README.md with today's D+1 min/max values."""
+    """Replace the forecast table and timestamp in README.md with today's D+1 min/max values."""
+    from datetime import datetime, timezone
+
     readme_path = ROOT / "README.md"
-    today_str = date.today().strftime("%d/%m/%Y")
+    now_utc = datetime.now(timezone.utc)
+    today_str = now_utc.strftime("%d/%m/%Y")
+    timestamp_str = now_utc.strftime("%d/%m/%Y %H:%M UTC")
 
     rows = ["| City | Min (°C) | Max (°C) | Date |", "|------|----------|----------|------|"]
     for city_key, values in city_forecasts.items():
@@ -184,12 +188,21 @@ def update_readme_table(city_forecasts: dict) -> None:
 
     table_block = "\n".join(rows)
     content = readme_path.read_text()
-    start_marker = "<!-- FORECAST_TABLE_START -->"
-    end_marker = "<!-- FORECAST_TABLE_END -->"
-    before = content.split(start_marker)[0]
-    after = content.split(end_marker)[1]
-    readme_path.write_text(f"{before}{start_marker}\n{table_block}\n{end_marker}{after}")
-    log.info("  README table updated")
+
+    # update timestamp
+    time_start = "<!-- UPDATE_TIME_START -->"
+    time_end = "<!-- UPDATE_TIME_END -->"
+    before_time = content.split(time_start)[0]
+    after_time = content.split(time_end)[1]
+    content = f"{before_time}{time_start}\n**Last update: {timestamp_str}**\n{time_end}{after_time}"
+
+    # update forecast table
+    table_start = "<!-- FORECAST_TABLE_START -->"
+    table_end = "<!-- FORECAST_TABLE_END -->"
+    before_table = content.split(table_start)[0]
+    after_table = content.split(table_end)[1]
+    readme_path.write_text(f"{before_table}{table_start}\n{table_block}\n{table_end}{after_table}")
+    log.info("  README table and timestamp updated")
 
 
 def main() -> None:

@@ -6,6 +6,10 @@ Daily ensemble forecasting system for temperature, precipitation, extreme events
 
 ## Daily update
 
+<!-- UPDATE_TIME_START -->
+**Last update: 03/06/2026 06:00 UTC**
+<!-- UPDATE_TIME_END -->
+
 Forecasts are updated automatically every day at **06:00 UTC**.
 
 Latest predictions: [data/predictions/](https://github.com/srxkatsumi/climate-adaptive-ml/tree/main/data/predictions)
