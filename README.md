@@ -15,11 +15,15 @@ Forecasts are updated automatically every day at **06:00 UTC**.
 Latest predictions: [data/predictions/](https://github.com/srxkatsumi/climate-adaptive-ml/tree/main/data/predictions)
 
 <!-- FORECAST_TABLE_START -->
-| City | Min (°C) | Max (°C) | Date |
-|------|----------|----------|------|
-| Barcelona | 18.3 | 26.1 | 03/06/2026 |
-| São Paulo | 13.8 | 20.5 | 03/06/2026 |
-| Manaus | 24.4 | 28.1 | 03/06/2026 |
+| Modelo | BCN Min | BCN Max | SP Min | SP Max | MNS Min | MNS Max | Atualizado | Acurácia D+1 |
+|--------|---------|---------|--------|--------|---------|---------|-----------|--------------|
+| Climatologia | — | — | — | — | — | — | — | — |
+| Random Forest | — | — | — | — | — | — | — | — |
+| XGBoost | — | — | — | — | — | — | — | — |
+| LightGBM | — | — | — | — | — | — | — | — |
+| LSTM | — | — | — | — | — | — | — | — |
+| ARIMA | — | — | — | — | — | — | — | — |
+| Ensemble Adaptativo | — | — | — | — | — | — | — | — |
 <!-- FORECAST_TABLE_END -->
 
 ---
