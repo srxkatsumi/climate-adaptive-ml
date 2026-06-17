@@ -40,13 +40,13 @@ CITY_SHORT = {
 }
 
 MODEL_DISPLAY = {
-    "climatology":       "Climatologia",
+    "climatology":       "Climatology",
     "random_forest":     "Random Forest",
     "xgboost":           "XGBoost",
     "lightgbm":          "LightGBM",
     "lstm":              "LSTM",
     "arima":             "ARIMA",
-    "adaptive_ensemble": "Ensemble Adaptativo",
+    "adaptive_ensemble": "Adaptive Ensemble",
 }
 
 
@@ -205,12 +205,12 @@ def update_readme_table(df: pd.DataFrame) -> None:
     timestamp_str = now_utc.strftime("%d/%m/%Y %H:%M UTC")
 
     header = (
-        "| Modelo | BCN Min | BCN Max | SP Min | SP Max | MNS Min | MNS Max "
-        "| Atualizado | Acurácia D+1 |"
+        "| Model | BCN Min | BCN Max | SP Min | SP Max | MNS Min | MNS Max "
+        "| Updated | Accuracy D+1 |"
     )
     sep = (
-        "|--------|---------|---------|--------|--------|---------|---------|"
-        "-----------|--------------|"
+        "|-------|---------|---------|--------|--------|---------|---------|"
+        "---------|-------------|"
     )
     lines = [header, sep]
 
