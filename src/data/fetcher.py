@@ -7,10 +7,21 @@ import requests
 import pandas as pd
 from datetime import date, timedelta
 from pathlib import Path
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 
 OPEN_METEO_FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 OPEN_METEO_HISTORICAL_URL = "https://archive-api.open-meteo.com/v1/archive"
+
+_RETRY = Retry(total=4, backoff_factor=3, connect=3, read=3, status_forcelist=[429, 500, 502, 503, 504])
+
+
+def _session() -> requests.Session:
+    s = requests.Session()
+    adapter = HTTPAdapter(max_retries=_RETRY)
+    s.mount("https://", adapter)
+    return s
 
 TEMPERATURE_VARS = [
     "temperature_2m_max",
@@ -42,7 +53,7 @@ def fetch_forecast(city_config: dict, horizon_days: int = 15) -> pd.DataFrame:
         "forecast_days": horizon_days,
         "timezone": city_config["timezone"],
     }
-    response = requests.get(OPEN_METEO_FORECAST_URL, params=params, timeout=30)
+    response = _session().get(OPEN_METEO_FORECAST_URL, params=params, timeout=(30, 90))
     response.raise_for_status()
     return _parse_daily_response(response.json())
 
@@ -61,7 +72,7 @@ def fetch_historical(
         "end_date": str(end_date),
         "timezone": city_config["timezone"],
     }
-    response = requests.get(OPEN_METEO_HISTORICAL_URL, params=params, timeout=60)
+    response = _session().get(OPEN_METEO_HISTORICAL_URL, params=params, timeout=(60, 180))
     response.raise_for_status()
     return _parse_daily_response(response.json())
 
