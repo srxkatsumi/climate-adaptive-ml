@@ -3,25 +3,16 @@ Open-Meteo API fetcher — historical and forecast data.
 Docs: https://open-meteo.com/en/docs
 """
 
+import logging
+import time
 import requests
 import pandas as pd
 from datetime import date, timedelta
-from pathlib import Path
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
 
+log = logging.getLogger(__name__)
 
 OPEN_METEO_FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 OPEN_METEO_HISTORICAL_URL = "https://archive-api.open-meteo.com/v1/archive"
-
-_RETRY = Retry(total=4, backoff_factor=3, connect=3, read=3, status_forcelist=[429, 500, 502, 503, 504])
-
-
-def _session() -> requests.Session:
-    s = requests.Session()
-    adapter = HTTPAdapter(max_retries=_RETRY)
-    s.mount("https://", adapter)
-    return s
 
 TEMPERATURE_VARS = [
     "temperature_2m_max",
@@ -43,6 +34,26 @@ WIND_VARS = [
 
 ALL_DAILY_VARS = TEMPERATURE_VARS + PRECIPITATION_VARS + WIND_VARS
 
+_RETRYABLE = (
+    requests.exceptions.Timeout,
+    requests.exceptions.ConnectionError,
+)
+
+
+def _get_with_retry(url: str, params: dict, timeout: tuple, max_attempts: int = 4) -> requests.Response:
+    for attempt in range(max_attempts):
+        try:
+            resp = requests.get(url, params=params, timeout=timeout)
+            resp.raise_for_status()
+            return resp
+        except _RETRYABLE as exc:
+            if attempt == max_attempts - 1:
+                raise
+            wait = 5 * (2 ** attempt)  # 5s, 10s, 20s
+            log.warning(f"Request failed (attempt {attempt + 1}/{max_attempts}): {exc} — retrying in {wait}s")
+            time.sleep(wait)
+    raise RuntimeError("unreachable")
+
 
 def fetch_forecast(city_config: dict, horizon_days: int = 15) -> pd.DataFrame:
     """Download forecast for the next `horizon_days` days from Open-Meteo."""
@@ -53,9 +64,7 @@ def fetch_forecast(city_config: dict, horizon_days: int = 15) -> pd.DataFrame:
         "forecast_days": horizon_days,
         "timezone": city_config["timezone"],
     }
-    response = _session().get(OPEN_METEO_FORECAST_URL, params=params, timeout=(30, 90))
-    response.raise_for_status()
-    return _parse_daily_response(response.json())
+    return _parse_daily_response(_get_with_retry(OPEN_METEO_FORECAST_URL, params, timeout=(30, 90)).json())
 
 
 def fetch_historical(
@@ -72,9 +81,7 @@ def fetch_historical(
         "end_date": str(end_date),
         "timezone": city_config["timezone"],
     }
-    response = _session().get(OPEN_METEO_HISTORICAL_URL, params=params, timeout=(60, 180))
-    response.raise_for_status()
-    return _parse_daily_response(response.json())
+    return _parse_daily_response(_get_with_retry(OPEN_METEO_HISTORICAL_URL, params, timeout=(60, 180)).json())
 
 
 def fetch_last_n_days(city_config: dict, n_days: int = 365) -> pd.DataFrame:
