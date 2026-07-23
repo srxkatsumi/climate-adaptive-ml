@@ -7,7 +7,7 @@ Daily ensemble forecasting system for temperature, precipitation, extreme events
 ## Daily update
 
 <!-- UPDATE_TIME_START -->
-**Last update: 22/07/2026 08:29 UTC**
+**Last update: 23/07/2026 08:32 UTC**
 <!-- UPDATE_TIME_END -->
 
 Forecasts are updated automatically every day at **06:00 UTC**.
@@ -17,13 +17,13 @@ Latest predictions: [data/predictions/](https://github.com/srxkatsumi/climate-ad
 <!-- FORECAST_TABLE_START -->
 | Model | BCN Min | BCN Max | SP Min | SP Max | MNS Min | MNS Max | Updated | Accuracy D+1 |
 |-------|---------|---------|--------|--------|---------|---------|---------|-------------|
-| Climatology | 13.2 | 21.1 | 16.1 | 25.5 | 24.7 | 30.3 | 22/07/2026 | 100.0% |
-| Random Forest | 22.3 | 31.2 | 16.4 | 25.1 | 25.6 | 32.1 | 22/07/2026 | 74.4% |
-| XGBoost | 22.5 | 29.5 | 17.4 | 24.3 | 25.6 | 31.4 | 22/07/2026 | 74.4% |
-| LightGBM | 22.4 | 32.0 | 16.7 | 24.5 | 25.4 | 31.6 | 22/07/2026 | 75.6% |
-| LSTM | 22.3 | 31.2 | 16.4 | 25.1 | 25.6 | 32.1 | 22/07/2026 | 11.2% |
-| ARIMA | 13.1 | 21.0 | 15.9 | 26.5 | 24.5 | 29.4 | 22/07/2026 | 42.0% |
-| Adaptive Ensemble | 22.0 | 29.7 | 15.6 | 23.0 | 25.0 | 30.3 | 22/07/2026 | 68.5% |
+| Climatology | 13.2 | 21.1 | 16.1 | 25.5 | 24.7 | 30.3 | 23/07/2026 | 100.0% |
+| Random Forest | 22.3 | 30.5 | 15.2 | 25.1 | 25.6 | 32.0 | 23/07/2026 | 75.8% |
+| XGBoost | 21.6 | 28.5 | 15.2 | 23.0 | 25.9 | 31.4 | 23/07/2026 | 75.6% |
+| LightGBM | 21.8 | 31.9 | 14.1 | 22.8 | 25.5 | 31.5 | 23/07/2026 | 76.8% |
+| LSTM | 22.3 | 30.5 | 15.2 | 25.1 | 25.6 | 32.0 | 23/07/2026 | 10.3% |
+| ARIMA | 12.4 | 20.4 | 15.5 | 26.3 | 24.5 | 29.2 | 23/07/2026 | 43.9% |
+| Adaptive Ensemble | 21.8 | 29.4 | 14.7 | 22.4 | 25.0 | 30.3 | 23/07/2026 | 69.7% |
 <!-- FORECAST_TABLE_END -->
 
 ---
